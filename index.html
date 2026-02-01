@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>My Valentine 💖</title>
+
 <style>
 body {
   margin: 0;
@@ -15,42 +16,34 @@ body {
   font-family: "Comic Sans MS", cursive;
 }
 
-.container { text-align: center; }
-h1 { font-size: 40px; }
+.container {
+  text-align: center;
+  z-index: 2;
+}
+
+h1 {
+  font-size: 42px;
+}
 
 button {
-  font-size: 18px;
-  padding: 12px 25px;
+  font-size: 20px;
+  padding: 12px 28px;
   margin: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
 }
 
-#yes { background: #ff4d6d; color: white; }
-#no { background: white; }
-
-#bottomMsg {
-  position: fixed;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: #ff1a75;
-  font-weight: bold;
-  text-align: center;
-  pointer-events: none;
+#yes {
+  background: #ff4d6d;
+  color: white;
 }
 
-#signature {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff0066;
+#no {
+  background: white;
 }
 
+/* Floating hearts */
 .heart {
   position: absolute;
   font-size: 24px;
@@ -62,39 +55,63 @@ button {
   100% { transform: translateY(-100vh); opacity: 0; }
 }
 
-.cry-cat {
+/* Crying cat emoji */
+.cat {
   position: absolute;
-  width: 60px;
-  height: auto;
-  animation: floatUp 5s linear forwards;
+  font-size: 48px;
+  animation: catFloat 4s forwards;
 }
 
-@keyframes floatUp {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+@keyframes catFloat {
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
 }
 
+/* Dinosaur */
 #dino {
-  position: absolute;
-  bottom: 80px;
-  left: -150px;
-  width: 150px;
-  transition: bottom 0.3s;
+  position: fixed;
+  bottom: 90px;
+  left: -100px;
+  font-size: 80px;
+  display: none;
 }
 
-.kissHeart {
+/* Kiss hearts */
+.kiss {
   position: absolute;
-  font-size: 40px;
-  color: red;
-  animation: flyHeart 1s forwards;
+  font-size: 30px;
+  animation: kissFly 1s forwards;
 }
 
-@keyframes flyHeart {
-  0% { transform: translate(0,0) scale(1); opacity:1; }
-  100% { transform: translate(50px,-80px) scale(1.5); opacity:0; }
+@keyframes kissFly {
+  0% { opacity: 1; transform: translate(0,0); }
+  100% { opacity: 0; transform: translate(50px,-80px); }
+}
+
+/* Bottom message */
+#bottomMsg {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff0055;
+  text-align: center;
+}
+
+/* Signature */
+#signature {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0066;
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -104,10 +121,9 @@ button {
 </div>
 
 <div id="bottomMsg"></div>
-<div id="signature">From your ANJOORAN/ Pookiee Batman 🎀🎀</div>
+<div id="signature">From your ANJOORAN / Pookiee Batman 🎀🎀</div>
 
-<!-- Working dinosaur GIF -->
-<img id="dino" src="https://i.ibb.co/bX5GZb6/cute-dino.gif" style="display:none;">
+<div id="dino">🦖</div>
 
 <script>
 const noBtn = document.getElementById("no");
@@ -116,101 +132,90 @@ const text = document.getElementById("text");
 const bottomMsg = document.getElementById("bottomMsg");
 const dino = document.getElementById("dino");
 
-let noClickCount = 0;
+let noCount = 0;
 
-// Crying cat images (working URLs)
-const catImages = [
-  "https://i.ibb.co/7yVY2XK/crying-cat.png",
-  "https://i.ibb.co/K0kW0sF/crying-cat2.png",
-  "https://i.ibb.co/kGK9v8S/crying-cat3.png"
-];
-
-// No button click
+// NO button
 noBtn.addEventListener("click", () => {
-  noClickCount++;
+  noCount++;
 
-  for(let i=0;i<5;i++){
-    const cat = document.createElement("img");
-    cat.src = catImages[Math.floor(Math.random()*catImages.length)];
-    cat.className = "cry-cat";
-
-    // Pop from center
-    cat.style.left = (window.innerWidth/2 - 30 + Math.random()*60 - 30) + "px";
-    cat.style.top = (window.innerHeight/2 - 30 + Math.random()*60 - 30) + "px";
-
+  for (let i = 0; i < 4; i++) {
+    const cat = document.createElement("div");
+    cat.className = "cat";
+    cat.innerHTML = "😭🐱";
+    cat.style.left = (window.innerWidth / 2 - 20 + Math.random()*40) + "px";
+    cat.style.top = (window.innerHeight / 2 - 20 + Math.random()*40) + "px";
     document.body.appendChild(cat);
-    setTimeout(()=>cat.remove(),5000);
+    setTimeout(() => cat.remove(), 4000);
   }
 
-  if(noClickCount>=2){
+  if (noCount >= 2) {
     bottomMsg.textContent = "Bitchhhh whattttttttt ?";
-    setTimeout(()=>bottomMsg.textContent="",3000);
+    setTimeout(() => bottomMsg.textContent = "", 3000);
   }
 });
 
-// Yes button click
+// YES button
 yesBtn.addEventListener("click", () => {
   text.innerHTML = "YAYYYY 💖💖 I knew it!!! 😍";
-  noBtn.style.display="none";
+  noBtn.style.display = "none";
 
-  bottomMsg.textContent = "I knew it TUBYYYYY !!! I knew it, cause Bitch are mine forever";
+  bottomMsg.textContent =
+    "I knew it TUBYYYYY !!! I knew it, cause Bitch are mine forever";
 
-  dino.style.display="block";
-
-  // Looping dino animation
-  let direction = 1; // 1=right, -1=left
-  let pos = -150;
-  const loopDino = () => {
-    pos += direction*2;
-    dino.style.left = pos+"px";
-
-    // Jump every 40px
-    if(pos % 40 === 0){
-      dino.style.bottom = direction===1 ? "130px" : "110px";
-    } else {
-      dino.style.bottom = "80px";
-    }
-
-    // Blow hearts at center
-    if(direction===1 && pos>=window.innerWidth/2-75 && pos<=window.innerWidth/2-73){
-      for(let i=0;i<3;i++){ // 3 hearts per pass
-        const heart = document.createElement("div");
-        heart.className="kissHeart";
-        heart.style.left = (window.innerWidth/2 + Math.random()*50 - 25) + "px";
-        heart.style.bottom = "130px";
-        heart.innerHTML="💖";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(),1000);
-      }
-    }
-
-    // Reverse when off-screen
-    if(pos>window.innerWidth){
-      direction=-1; pos=window.innerWidth;
-    }
-    if(pos<-150){
-      direction=1; pos=-150;
-    }
-
-    requestAnimationFrame(loopDino);
-  }
-  loopDino();
-
+  dino.style.display = "block";
   startHearts();
+  moveDino();
 });
 
+// Dino movement
+let pos = -100;
+let dir = 1;
+
+function moveDino() {
+  pos += dir * 2;
+  dino.style.left = pos + "px";
+
+  if (pos % 40 === 0) {
+    dino.style.bottom = "130px";
+    spawnKiss();
+  } else {
+    dino.style.bottom = "90px";
+  }
+
+  if (pos > window.innerWidth) {
+    dir = -1;
+  }
+  if (pos < -100) {
+    dir = 1;
+  }
+
+  requestAnimationFrame(moveDino);
+}
+
+// Kiss hearts
+function spawnKiss() {
+  const kiss = document.createElement("div");
+  kiss.className = "kiss";
+  kiss.innerHTML = "💋💖";
+  kiss.style.left = (pos + 50) + "px";
+  kiss.style.bottom = "140px";
+  document.body.appendChild(kiss);
+  setTimeout(() => kiss.remove(), 1000);
+}
+
 // Flying hearts
-function startHearts(){
-  setInterval(()=>{
+function startHearts() {
+  setInterval(() => {
     const heart = document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML="❤️";
-    heart.style.left = Math.random()*window.innerWidth+"px";
-    heart.style.bottom="0px";
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.bottom = "0px";
     document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),5000);
-  },300);
+    setTimeout(() => heart.remove(), 5000);
+  }, 300);
 }
 </script>
+
 </body>
 </html>
