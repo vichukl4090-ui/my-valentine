@@ -42,6 +42,14 @@ button {
   background: white;
 }
 
+/* Crying cat image styling */
+.cry-cat {
+  position: absolute;
+  width: 60px;
+  height: auto;
+  animation: floatUp 5s linear forwards;
+}
+
 .heart {
   position: absolute;
   font-size: 24px;
@@ -51,6 +59,24 @@ button {
 @keyframes float {
   0% { transform: translateY(0); opacity: 1; }
   100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Bottom message styling */
+#bottomMsg {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #ff1a75;
+  font-weight: bold;
+  text-align: center;
+  pointer-events: none;
 }
 </style>
 </head>
@@ -63,16 +89,45 @@ button {
   <button id="no">No 🙃</button>
 </div>
 
+<div id="bottomMsg"></div> <!-- Message container -->
+
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const text = document.getElementById("text");
+const bottomMsg = document.getElementById("bottomMsg");
 
-// No button runs away
-noBtn.addEventListener("mouseover", () => {
-  noBtn.style.position = "absolute";
-  noBtn.style.left = Math.random() * window.innerWidth + "px";
-  noBtn.style.top = Math.random() * window.innerHeight + "px";
+let noClickCount = 0;
+
+// Crying cat images
+const catImages = [
+  "https://i.imgur.com/1n7R6fL.png",
+  "https://i.imgur.com/ck0ZxHy.png",
+  "https://i.imgur.com/JjZ8x8J.png"
+];
+
+// No button clicked => spawn multiple crying cats
+noBtn.addEventListener("click", () => {
+  noClickCount++;
+
+  // Spawn 5 crying cats
+  for (let i = 0; i < 5; i++) {
+    const cat = document.createElement("img");
+    cat.src = catImages[Math.floor(Math.random() * catImages.length)];
+    cat.className = "cry-cat";
+    cat.style.left = Math.random() * (window.innerWidth - 60) + "px";
+    cat.style.bottom = "0px";
+    cat.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(cat);
+
+    setTimeout(() => cat.remove(), 5000);
+  }
+
+  // Show special message after 2 "No" clicks
+  if (noClickCount === 2) {
+    bottomMsg.textContent = "BIT**H Whaaaaaaat?";
+    setTimeout(() => bottomMsg.textContent = "", 3000); // clear after 3s
+  }
 });
 
 // Yes button clicked
@@ -80,6 +135,10 @@ yesBtn.addEventListener("click", () => {
   text.innerHTML = "YAYYYY 💖💖 I knew it!!! 😍";
   noBtn.style.display = "none";
   startHearts();
+
+  // Show bottom message above bottom center
+  bottomMsg.textContent = "I knew it TUBY, cause you are mine Bit*h";
+  setTimeout(() => bottomMsg.textContent = "", 4000); // clear after 4s
 });
 
 // Floating hearts
