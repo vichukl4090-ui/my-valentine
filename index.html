@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>My Valentine 💖</title>
-
 <style>
 body {
   margin: 0;
@@ -16,13 +15,9 @@ body {
   font-family: "Comic Sans MS", cursive;
 }
 
-.container {
-  text-align: center;
-}
+.container { text-align: center; }
 
-h1 {
-  font-size: 40px;
-}
+h1 { font-size: 40px; }
 
 button {
   font-size: 18px;
@@ -33,21 +28,28 @@ button {
   cursor: pointer;
 }
 
-#yes {
-  background: #ff4d6d;
-  color: white;
+#yes { background: #ff4d6d; color: white; }
+#no { background: white; }
+
+#bottomMsg {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #ff1a75;
+  font-weight: bold;
+  text-align: center;
+  pointer-events: none;
 }
 
-#no {
-  background: white;
-}
-
-/* Crying cat image styling */
-.cry-cat {
-  position: absolute;
-  width: 60px;
-  height: auto;
-  animation: floatUp 5s linear forwards;
+#signature {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0066;
 }
 
 .heart {
@@ -61,26 +63,39 @@ button {
   100% { transform: translateY(-100vh); opacity: 0; }
 }
 
+.cry-cat {
+  position: absolute;
+  width: 60px;
+  height: auto;
+  animation: floatUp 5s linear forwards;
+}
+
 @keyframes floatUp {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
 }
 
-/* Bottom message styling */
-#bottomMsg {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: #ff1a75;
-  font-weight: bold;
-  text-align: center;
-  pointer-events: none;
+#dino {
+  position: absolute;
+  bottom: 80px;
+  left: -150px;
+  width: 150px;
+  transition: bottom 0.3s;
+}
+
+.kissHeart {
+  position: absolute;
+  font-size: 40px;
+  color: red;
+  animation: flyHeart 1s forwards;
+}
+
+@keyframes flyHeart {
+  0% { transform: translate(0,0) scale(1); opacity:1; }
+  100% { transform: translate(50px,-80px) scale(1.5); opacity:0; }
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -89,13 +104,16 @@ button {
   <button id="no">No 🙃</button>
 </div>
 
-<div id="bottomMsg"></div> <!-- Message container -->
+<div id="bottomMsg"></div>
+<div id="signature">From your ANJOORAN/ Pookiee Batman 🎀🎀</div>
+<img id="dino" src="https://i.imgur.com/8QmBfF7.png" style="display:none;">
 
 <script>
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const text = document.getElementById("text");
 const bottomMsg = document.getElementById("bottomMsg");
+const dino = document.getElementById("dino");
 
 let noClickCount = 0;
 
@@ -106,55 +124,90 @@ const catImages = [
   "https://i.imgur.com/JjZ8x8J.png"
 ];
 
-// No button clicked => spawn multiple crying cats
+// No button click
 noBtn.addEventListener("click", () => {
   noClickCount++;
 
-  // Spawn 5 crying cats
-  for (let i = 0; i < 5; i++) {
+  for(let i=0;i<5;i++){
     const cat = document.createElement("img");
-    cat.src = catImages[Math.floor(Math.random() * catImages.length)];
+    cat.src = catImages[Math.floor(Math.random()*catImages.length)];
     cat.className = "cry-cat";
-    cat.style.left = Math.random() * (window.innerWidth - 60) + "px";
-    cat.style.bottom = "0px";
-    cat.style.transform = `rotate(${Math.random()*360}deg)`;
-    document.body.appendChild(cat);
 
-    setTimeout(() => cat.remove(), 5000);
+    // Center of screen
+    cat.style.left = (window.innerWidth/2 - 30 + Math.random()*60 - 30) + "px";
+    cat.style.top = (window.innerHeight/2 - 30 + Math.random()*60 - 30) + "px";
+
+    document.body.appendChild(cat);
+    setTimeout(()=>cat.remove(),5000);
   }
 
-  // Show special message after 2 "No" clicks
-  if (noClickCount === 2) {
-    bottomMsg.textContent = "BIT**H Whaaaaaaat?";
-    setTimeout(() => bottomMsg.textContent = "", 3000); // clear after 3s
+  if(noClickCount>=2){
+    bottomMsg.textContent = "Bitchhhh whattttttttt ?";
+    setTimeout(()=>bottomMsg.textContent="",3000);
   }
 });
 
-// Yes button clicked
+// Yes button click
 yesBtn.addEventListener("click", () => {
   text.innerHTML = "YAYYYY 💖💖 I knew it!!! 😍";
-  noBtn.style.display = "none";
-  startHearts();
+  noBtn.style.display="none";
 
-  // Show bottom message above bottom center
-  bottomMsg.textContent = "I knew it TUBY, cause you are mine Bit*h";
-  setTimeout(() => bottomMsg.textContent = "", 4000); // clear after 4s
+  bottomMsg.textContent = "I knew it TUBYYYYY !!! I knew it, cause Bitch are mine forever";
+
+  dino.style.display="block";
+
+  // Looping dino animation
+  let direction = 1; // 1=right, -1=left
+  let pos = -150;
+  const loopDino = () => {
+    pos += direction*2;
+    dino.style.left = pos+"px";
+
+    // Jump every 40px
+    if(pos % 40 === 0){
+      dino.style.bottom = direction===1 ? "130px" : "110px";
+    } else {
+      dino.style.bottom = "80px";
+    }
+
+    // Blow heart at center
+    if(direction===1 && pos>=window.innerWidth/2-75 && pos<=window.innerWidth/2-73){
+      const heart = document.createElement("div");
+      heart.className="kissHeart";
+      heart.style.left = (window.innerWidth/2) + "px";
+      heart.style.bottom = "130px";
+      heart.innerHTML="💖";
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),1000);
+    }
+
+    // Reverse when off-screen
+    if(pos>window.innerWidth){
+      direction=-1; pos=window.innerWidth;
+    }
+    if(pos<-150){
+      direction=1; pos=-150;
+    }
+
+    requestAnimationFrame(loopDino);
+  }
+  loopDino();
+
+  startHearts();
 });
 
-// Floating hearts
-function startHearts() {
-  setInterval(() => {
+// Flying hearts
+function startHearts(){
+  setInterval(()=>{
     const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.bottom = "0px";
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left = Math.random()*window.innerWidth+"px";
+    heart.style.bottom="0px";
     document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 5000);
-  }, 300);
+    setTimeout(()=>heart.remove(),5000);
+  },300);
 }
 </script>
-
 </body>
 </html>
